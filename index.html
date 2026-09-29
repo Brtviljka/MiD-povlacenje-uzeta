@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="hr" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⭐ Povlačenje užeta - Matematička borba ⭐</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Raleway:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+html, body { height: 100%; margin: 0; overflow: hidden; }
+* { font-family: 'Raleway', sans-serif; box-sizing: border-box; }
+.Montserrat { font-family: 'Montserrat', sans-serif; }
+
+.rope-container { position: relative; height: 60px; background: #2d1810; border-radius: 30px; overflow: hidden; border: 3px solid #1a0e08; }
+.rope-fill-left { position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(90deg, #e74c3c, #c0392b); transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); border-radius: 30px 0 0 30px; }
+.rope-fill-right { position: absolute; right: 0; top: 0; height: 100%; background: linear-gradient(90deg, #2980b9, #3498db); transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); border-radius: 0 30px 30px 0; }
+.rope-marker { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 20px; height: 50px; background: #f1c40f; border-radius: 6px; border: 3px solid #d4a017; transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 10; box-shadow: 0 0 15px rgba(241,196,15,0.6); }
+.rope-knot { position: absolute; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; background: #8B6914; border-radius: 50%; z-index: 5; }
+
+.calc-btn { width: 56px; height: 56px; border-radius: 12px; font-size: 1.4rem; font-weight: 700; cursor: pointer; transition: all 0.1s; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; user-select: none; -webkit-user-select: none; }
+.calc-btn:active { transform: scale(0.92); }
+
+.p1-btn { background: #fde8e8; color: #c0392b; border-color: #e8a0a0; }
+.p1-btn:hover { background: #f9cdcd; }
+.p2-btn { background: #dbeafe; color: #1e40af; border-color: #93b4e8; }
+.p2-btn:hover { background: #bfdbfe; }
+
+.send-btn-p1 { background: #e74c3c; color: white; }
+.send-btn-p1:hover { background: #c0392b; }
+.send-btn-p2 { background: #3498db; color: white; }
+.send-btn-p2:hover { background: #2980b9; }
+
+.clear-btn { background: #f3f4f6; color: #374151; border-color: #d1d5db; }
+.clear-btn:hover { background: #e5e7eb; }
+
+.name-chip { padding: 6px 14px; border-radius: 20px; background: #f0fdf4; border: 2px solid #86efac; color: #166534; font-weight: 600; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; cursor: default; }
+.name-chip .remove-name { cursor: pointer; color: #dc2626; font-weight: 700; font-size: 1rem; line-height: 1; }
+
+.name-chip:nth-child(1) { background: linear-gradient(135deg, #fecaca, #fca5a5); border-color: #dc2626; color: #991b1b; }
+.name-chip:nth-child(2) { background: linear-gradient(135deg, #bfdbfe, #93c5fd); border-color: #2563eb; color: #1e3a8a; }
+.name-chip:nth-child(3) { background: linear-gradient(135deg, #d1d5db, #a3e635); border-color: #6366f1; color: #312e81; }
+.name-chip:nth-child(4) { background: linear-gradient(135deg, #fde047, #fbbf24); border-color: #d97706; color: #78350f; }
+.name-chip:nth-child(5) { background: linear-gradient(135deg, #d8b4fe, #c4b5fd); border-color: #a855f7; color: #581c87; }
+.name-chip:nth-child(6) { background: linear-gradient(135deg, #a5f3fc, #7dd3fc); border-color: #0891b2; color: #164e63; }
+.name-chip:nth-child(7) { background: linear-gradient(135deg, #fed7aa, #fdba74); border-color: #ea580c; color: #7c2d12; }
+.name-chip:nth-child(8) { background: linear-gradient(135deg, #fbcfe8, #f9a8d4); border-color: #ec4899; color: #831843; }
+.name-chip:nth-child(9) { background: linear-gradient(135deg, #c6f6d5, #9ae6b4); border-color: #059669; color: #065f46; }
+.name-chip:nth-child(10) { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); border-color: #4f46e5; color: #312e81; }
+.name-chip:nth-child(11) { background: linear-gradient(135deg, #fce7f3, #fbcfe8); border-color: #db2777; color: #500724; }
+.name-chip:nth-child(12) { background: linear-gradient(135deg, #fef3c7, #fed7aa); border-color: #b45309; color: #78350f; }
+.name-chip:nth-child(13) { background: linear-gradient(135deg, #dcfce7, #bbf7d0); border-color: #16a34a; color: #14532d; }
+.name-chip:nth-child(14) { background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-color: #1d4ed8; color: #1e3a8a; }
+.name-chip:nth-child(15) { background: linear-gradient(135deg, #fccf31, #fda92d); border-color: #d97706; color: #7c2d12; }
+.name-chip:nth-child(16) { background: linear-gradient(135deg, #f6d5a8, #f59e0b); border-color: #b45309; color: #78350f; }
+.name-chip:nth-child(17) { background: linear-gradient(135deg, #a78bfa, #8b5cf6); border-color: #7c3aed; color: #3f0f5c; }
+.name-chip:nth-child(18) { background: linear-gradient(135deg, #67e8f9, #06b6d4); border-color: #0e7490; color: #164e63; }
+.name-chip:nth-child(19) { background: linear-gradient(135deg, #fca5a5, #f87171); border-color: #be185d; color: #831843; }
+.name-chip:nth-child(20) { background: linear-gradient(135deg, #86efac, #4ade80); border-color: #15803d; color: #134e4a; }
+
+.task-type-btn { padding: 14px 28px; border-radius: 16px; font-size: 1.1rem; font-weight: 700; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; }
+.task-type-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+
+@keyframes celebrate { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+.celebrate { animation: celebrate 0.5s ease 3; }
+
+@keyframes confetti-fall { 0%{transform:translateY(-10px) rotate(0deg);opacity:1} 100%{transform:translateY(100px) rotate(720deg);opacity:0} }
+.confetti-piece { position: absolute; width: 10px; height: 10px; border-radius: 2px; animation: confetti-fall 1.5s ease forwards; }
+
+.score-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid; }
+.score-dot.filled-p1 { background: #e74c3c; border-color: #c0392b; }
+.score-dot.filled-p2 { background: #3498db; border-color: #2563eb; }
+.score-dot.empty { background: #e5e7eb; border-color: #d1d5db; }
+
+.pulse { animation: pulse-anim 0.4s ease; }
+@keyframes pulse-anim { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
+
+.input-display { min-height: 52px; background: white; border-radius: 12px; border: 3px solid #d1d5db; font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 4px 12px; letter-spacing: 2px; transition: border-color 0.2s; }
+.input-display.p1-active { border-color: #e74c3c; }
+.input-display.p2-active { border-color: #3498db; }
+
+.correct-flash { animation: flash-green 0.5s ease; }
+@keyframes flash-green { 0%{background:#22c55e;color:white} 100%{background:white} }
+.wrong-flash { animation: flash-red 0.5s ease; }
+@keyframes flash-red { 0%{background:#ef4444;color:white} 100%{background:white} }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
+  <div id="app" class="h-full w-full flex flex-col"><!-- SCREEN 1: Name Entry -->
+   <div id="screen-names" class="h-full w-full flex flex-col items-center justify-center p-4">
+    <div class="text-center mb-6">
+     <h1 id="mainTitle" class="Montserrat text-4xl font-bold text-amber-800 mb-2">⭐ Povlačenje užeta ⭐</h1>
+     <p class="text-amber-600 font-semibold text-lg">Matematička borba u brzom računanju! (👑made by Kaja👑)</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-2xl border-2 border-amber-200">
+     <h2 class="Montserrat text-xl font-bold text-amber-700 mb-3 text-center">unesi imena igrača (najviše 20 imena)</h2>
+     <div class="flex gap-2 mb-4"><input id="nameInput" type="text" maxlength="20" placeholder="Ime igrača..." class="flex-1 px-4 py-3 rounded-xl border-2 border-amber-300 text-lg font-semibold focus:outline-none focus:border-amber-500"> <button id="addNameBtn" class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold text-lg transition-all">Dodaj</button>
+     </div>
+     <div id="nameChips" class="flex flex-wrap gap-2 mb-4 min-h-[40px]"></div>
+     <p id="nameCount" class="text-amber-600 font-semibold text-center mb-4">0 / 20 igrača</p><button id="goToTaskType" class="w-full py-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl font-bold text-lg transition-all Montserrat"> Odaberi vrstu zadataka 🎯</button>
+    </div>
+   </div><!-- SCREEN 2: Task Type Selection -->
+   <div id="screen-tasktype" class="h-full w-full flex-col items-center justify-center p-4 hidden">
+    <div class="text-center mb-8">
+     <h1 class="Montserrat text-3xl font-bold text-amber-800 mb-2">Odaberi vrstu zadataka</h1>
+     <p class="text-amber-600 font-semibold">Kakve zadatke želiš u ovoj borbi?</p>
+    </div>
+    <div class="flex gap-6 justify-center flex-wrap mb-8"><button class="task-type-btn bg-green-100 text-green-800 border-green-400 hover:bg-green-200" data-type="multiply">🟢 Množenje ( · )</button> <button class="task-type-btn bg-blue-100 text-blue-800 border-blue-400 hover:bg-blue-200" data-type="divide">🔵 Dijeljenje ( : )</button> <button class="task-type-btn bg-purple-100 text-purple-800 border-purple-400 hover:bg-purple-200" data-type="mixed">🟣 Mješovito ( · i : )</button>
+    </div>
+    <div id="selectedTypeDisplay" class="text-center mb-6 hidden">
+     <p class="text-lg font-bold text-amber-700 mb-2">Odabrano: <span id="selectedTypeText" class="Montserrat"></span></p>
+     <div id="randomPlayersDisplay" class="Montserrat text-2xl font-bold mb-4"></div><button id="startGameBtn" class="px-10 py-4 bg-gradient-to-r from-red-500 to-blue-500 text-white rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl transition-all Montserrat">🚀 Započni borbu!</button>
+    </div><button id="backToNames" class="mt-4 text-amber-600 hover:text-amber-800 font-semibold underline">← Natrag na imena</button>
+   </div><!-- SCREEN 3: Game -->
+   <div id="screen-game" class="h-full w-full flex-col hidden"><!-- Top bar -->
+    <div class="flex items-center justify-between px-4 py-2 bg-gradient-to-r from-red-100 via-amber-100 to-blue-100 border-b-2 border-amber-200">
+     <div class="Montserrat text-xl font-bold text-red-600" id="p1NameDisplay">
+      Igrač 1
+     </div>
+     <div class="text-center"><span id="roundDisplay" class="Montserrat text-lg font-bold text-amber-700">😉 Množiti i dijeliti je lako - pokazat ću ti kako 😉</span>
+     </div>
+     <div class="Montserrat text-xl font-bold text-blue-600" id="p2NameDisplay">
+      Igrač 2
+     </div>
+    </div><!-- Score dots -->
+    <div class="flex items-center justify-center gap-1 py-2 bg-white border-b border-amber-100"><span class="text-red-500 font-bold text-sm mr-2" id="p1ScoreNum">0</span>
+     <div id="scoreDots" class="flex gap-1"></div><span class="text-blue-500 font-bold text-sm ml-2" id="p2ScoreNum">0</span>
+    </div><!-- Rope -->
+    <div class="px-6 py-3 bg-gradient-to-r from-red-50 via-amber-50 to-blue-50">
+     <div class="rope-container" id="ropeContainer">
+      <div class="rope-fill-left" id="ropeFillLeft"></div>
+      <div class="rope-fill-right" id="ropeFillRight"></div>
+      <div class="rope-marker" id="ropeMarker"></div>
+     </div>
+     <div class="flex justify-between mt-1 px-2"><span class="text-red-400 text-xs font-bold">◄ <span id="p1NameRope"></span></span> <span class="text-blue-400 text-xs font-bold"><span id="p2NameRope"></span> ►</span>
+     </div>
+    </div><!-- Players area: side by side -->
+    <div class="flex-1 flex overflow-hidden"><!-- Player 1 -->
+     <div class="flex-1 flex flex-col items-center p-3 bg-gradient-to-b from-red-50 to-red-100 border-r-2 border-amber-200">
+      <div id="p1Task" class="Montserrat text-3xl font-bold text-red-700 mb-2">
+       ? · ? = ?
+      </div>
+      <div id="p1Input" class="input-display w-48 mb-2 text-red-700">
+       &nbsp;
+      </div>
+      <div id="p1Feedback" class="h-6 text-lg font-bold mb-1">
+       &nbsp;
+      </div>
+      <div class="grid grid-cols-3 gap-2 mb-2"><button class="calc-btn p1-btn" onclick="pressKey(1,'1')">1</button> <button class="calc-btn p1-btn" onclick="pressKey(1,'2')">2</button> <button class="calc-btn p1-btn" onclick="pressKey(1,'3')">3</button> <button class="calc-btn p1-btn" onclick="pressKey(1,'4')">4</button> <button class="calc-btn p1-btn" onclick="pressKey(1,'5')">5</button> <button class="calc-btn p1-btn" onclick="pressKey(1,'6')">6</button> <button class="calc-btn p1-btn" onclick="pressKey(1,'7')">7</button> <button class="calc-btn p1-btn" onclick="pressKey(1,'8')">8</button> <button class="calc-btn p1-btn" onclick="pressKey(1,'9')">9</button> <button class="calc-btn clear-btn" onclick="clearInput(1)">⌫</button> <button class="calc-btn p1-btn" onclick="pressKey(1,'0')">0</button> <button class="calc-btn send-btn-p1" onclick="submitAnswer(1)">✓</button>
+      </div>
+     </div><!-- Player 2 -->
+     <div class="flex-1 flex flex-col items-center p-3 bg-gradient-to-b from-blue-50 to-blue-100">
+      <div id="p2Task" class="Montserrat text-3xl font-bold text-blue-700 mb-2">
+       ? : ? = ?
+      </div>
+      <div id="p2Input" class="input-display w-48 mb-2 text-blue-700">
+       &nbsp;
+      </div>
+      <div id="p2Feedback" class="h-6 text-lg font-bold mb-1">
+       &nbsp;
+      </div>
+      <div class="grid grid-cols-3 gap-2 mb-2"><button class="calc-btn p2-btn" onclick="pressKey(2,'1')">1</button> <button class="calc-btn p2-btn" onclick="pressKey(2,'2')">2</button> <button class="calc-btn p2-btn" onclick="pressKey(2,'3')">3</button> <button class="calc-btn p2-btn" onclick="pressKey(2,'4')">4</button> <button class="calc-btn p2-btn" onclick="pressKey(2,'5')">5</button> <button class="calc-btn p2-btn" onclick="pressKey(2,'6')">6</button> <button class="calc-btn p2-btn" onclick="pressKey(2,'7')">7</button> <button class="calc-btn p2-btn" onclick="pressKey(2,'8')">8</button> <button class="calc-btn p2-btn" onclick="pressKey(2,'9')">9</button> <button class="calc-btn clear-btn" onclick="clearInput(2)">⌫</button> <button class="calc-btn p2-btn" onclick="pressKey(2,'0')">0</button> <button class="calc-btn send-btn-p2" onclick="submitAnswer(2)">✓</button>
+      </div>
+     </div>
+    </div>
+   </div><!-- SCREEN 4: Winner -->
+   <div id="screen-winner" class="h-full w-full flex-col items-center justify-center p-4 hidden" style="position:relative;overflow:hidden;">
+    <div id="confettiContainer" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></div>
+    <div class="text-center relative z-10">
+     <div class="text-6xl mb-4">
+      🏆
+     </div>
+     <h1 id="winnerText" class="Montserrat text-4xl font-bold mb-2 celebrate"></h1>
+     <p id="winnerScore" class="text-xl font-semibold text-amber-700 mb-6"></p>
+     <div class="flex gap-4 justify-center flex-wrap"><button id="playAgainBtn" class="px-8 py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all Montserrat">🔄 Nova borba</button> <button id="backToMenuBtn" class="px-8 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-bold text-lg transition-all">← Početni zaslon</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+// State
+let playerNames = [];
+let taskType = '';
+let p1Name = '', p2Name = '';
+let p1Score = 0, p2Score = 0;
+let totalTasks = 10;
+let currentTask = 0;
+let p1Answer = '', p2Answer = '';
+let p1Task = null, p2Task = null;
+let p1Answered = false, p2Answered = false;
+let ropePos = 50; // percent, 50 = center
+
+const defaultConfig = {
+  game_title: '⭐Povlačenje užeta⭐',
+  background_color: '#fffbeb',
+  surface_color: '#ffffff',
+  text_color: '#92400e',
+  primary_action_color: '#f59e0b',
+  secondary_action_color: '#6b7280'
+};
+
+function applyConfig(config) {
+  const t = config.game_title || defaultConfig.game_title;
+  const el = document.getElementById('mainTitle');
+  if (el) el.textContent = '🪢 ' + t;
+
+  document.body.style.background = config.background_color || defaultConfig.background_color;
+}
+
+if (window.elementSdk) {
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (config) => applyConfig(config),
+    mapToCapabilities: (config) => ({
+      recolorables: [
+        { get: () => config.background_color || defaultConfig.background_color, set: v => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+        { get: () => config.surface_color || defaultConfig.surface_color, set: v => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+        { get: () => config.text_color || defaultConfig.text_color, set: v => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+        { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: v => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+        { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: v => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+      ],
+      borderables: [],
+      fontEditable: undefined,
+      fontSizeable: undefined
+    }),
+    mapToEditPanelValues: (config) => new Map([
+      ['game_title', config.game_title || defaultConfig.game_title]
+    ])
+  });
+}
+
+// Screens
+function showScreen(id) {
+  ['screen-names','screen-tasktype','screen-game','screen-winner'].forEach(s => {
+    const el = document.getElementById(s);
+    el.classList.add('hidden');
+    el.style.display = 'none';
+  });
+  const target = document.getElementById(id);
+  target.classList.remove('hidden');
+  target.style.display = 'flex';
+}
+
+// Name management
+function renderNames() {
+  const container = document.getElementById('nameChips');
+  container.innerHTML = '';
+  playerNames.forEach((name, i) => {
+    const chip = document.createElement('span');
+    chip.className = 'name-chip';
+    chip.innerHTML = `${name} <span class="remove-name" data-idx="${i}">✕</span>`;
+    container.appendChild(chip);
+  });
+  document.getElementById('nameCount').textContent = `${playerNames.length} / 20 igrača`;
+  document.getElementById('goToTaskType').disabled = playerNames.length < 2;
+}
+
+document.getElementById('addNameBtn').addEventListener('click', () => {
+  const input = document.getElementById('nameInput');
+  const name = input.value.trim();
+  if (name && playerNames.length < 20 && !playerNames.includes(name)) {
+    playerNames.push(name);
+    input.value = '';
+    renderNames();
+  }
+  input.focus();
+});
+
+document.getElementById('nameInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('addNameBtn').click(); }
+});
+
+document.getElementById('nameChips').addEventListener('click', e => {
+  if (e.target.classList.contains('remove-name')) {
+    playerNames.splice(parseInt(e.target.dataset.idx), 1);
+    renderNames();
+  }
+});
+
+document.getElementById('goToTaskType').addEventListener('click', () => showScreen('screen-tasktype'));
+document.getElementById('backToNames').addEventListener('click', () => showScreen('screen-names'));
+
+// Task type selection
+document.querySelectorAll('.task-type-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    taskType = btn.dataset.type;
+    // Random pick 2 players
+    const shuffled = [...playerNames].sort(() => Math.random() - 0.5);
+    p1Name = shuffled[0];
+    p2Name = shuffled[1];
+
+    const typeLabels = { multiply: '🟢 Množenje ( · )', divide: '🔵 Dijeljenje ( : )', mixed: '🟣 Mješovito ( · i : )' };
+    document.getElementById('selectedTypeText').textContent = typeLabels[taskType];
+    document.getElementById('randomPlayersDisplay').innerHTML = `<span class="text-red-600">${p1Name}</span> <span class="text-amber-500">⚔️</span> <span class="text-blue-600">${p2Name}</span>`;
+    document.getElementById('selectedTypeDisplay').classList.remove('hidden');
+  });
+});
+
+document.getElementById('startGameBtn').addEventListener('click', startGame);
+
+function startGame() {
+  p1Score = 0; p2Score = 0; currentTask = 0; ropePos = 50;
+  showScreen('screen-game');
+  document.getElementById('p1NameDisplay').textContent = p1Name;
+  document.getElementById('p2NameDisplay').textContent = p2Name;
+  document.getElementById('p1NameRope').textContent = p1Name;
+  document.getElementById('p2NameRope').textContent = p2Name;
+  updateRope();
+  renderScoreDots();
+  nextRound();
+}
+
+// Task generation
+function genMultiply() {
+  const a = Math.floor(Math.random() * 10) + 1;
+  const b = Math.floor(Math.random() * 10) + 1;
+  return { text: `${a} · ${b}`, answer: a * b };
+}
+
+function genDivide() {
+  const b = Math.floor(Math.random() * 9) + 2; // 2-10, no zero
+  const answer = Math.floor(Math.random() * 10) + 1; // 1-10
+  const a = b * answer;
+  return { text: `${a} : ${b}`, answer: answer };
+}
+
+function genTask() {
+  if (taskType === 'multiply') return genMultiply();
+  if (taskType === 'divide') return genDivide();
+  return Math.random() < 0.5 ? genMultiply() : genDivide();
+}
+
+function nextRound() {
+  if (currentTask >= totalTasks) { endGame(); return; }
+  currentTask++;
+  document.getElementById('roundDisplay').textContent = `😉 Množiti i dijeliti je lako - pokazat ću ti kako 😉 `;
+
+  p1Task = genTask();
+  p2Task = genTask();
+  p1Answer = ''; p2Answer = '';
+  p1Answered = false; p2Answered = false;
+
+  document.getElementById('p1Task').textContent = p1Task.text + ' = ?';
+  document.getElementById('p2Task').textContent = p2Task.text + ' = ?';
+  document.getElementById('p1Input').textContent = '\u00A0';
+  document.getElementById('p2Input').textContent = '\u00A0';
+  document.getElementById('p1Input').className = 'input-display w-48 mb-2 text-red-700 p1-active';
+  document.getElementById('p2Input').className = 'input-display w-48 mb-2 text-blue-700 p2-active';
+  document.getElementById('p1Feedback').innerHTML = '&nbsp;';
+  document.getElementById('p2Feedback').innerHTML = '&nbsp;';
+}
+
+// Calculator
+function pressKey(player, key) {
+  if (player === 1 && p1Answered) return;
+  if (player === 2 && p2Answered) return;
+  if (player === 1) {
+    if (p1Answer.length < 5) { p1Answer += key; document.getElementById('p1Input').textContent = p1Answer; }
+  } else {
+    if (p2Answer.length < 5) { p2Answer += key; document.getElementById('p2Input').textContent = p2Answer; }
+  }
+}
+
+function clearInput(player) {
+  if (player === 1 && !p1Answered) { p1Answer = ''; document.getElementById('p1Input').textContent = '\u00A0'; }
+  if (player === 2 && !p2Answered) { p2Answer = ''; document.getElementById('p2Input').textContent = '\u00A0'; }
+}
+
+function submitAnswer(player) {
+  if (player === 1 && p1Answered) return;
+  if (player === 2 && p2Answered) return;
+
+  const inputEl = document.getElementById(player === 1 ? 'p1Input' : 'p2Input');
+  const feedbackEl = document.getElementById(player === 1 ? 'p1Feedback' : 'p2Feedback');
+  const answer = player === 1 ? p1Answer : p2Answer;
+  const task = player === 1 ? p1Task : p2Task;
+
+  if (!answer) return;
+
+  const correct = parseInt(answer) === task.answer;
+
+  if (correct) {
+    if (player === 1) { p1Score++; p1Answered = true; ropePos -= 5; }
+    else { p2Score++; p2Answered = true; ropePos += 5; }
+    feedbackEl.innerHTML = '<span class="text-green-600">✅ Točno!</span>';
+    inputEl.classList.add('correct-flash');
+    updateRope();
+    updateScores();
+
+    // Check if someone reached the end
+    if (ropePos <= 10) {
+      setTimeout(() => endRound(p1Name), 600);
+      return;
+    }
+    if (ropePos >= 90) {
+      setTimeout(() => endRound(p2Name), 600);
+      return;
+    }
+
+    // Immediately generate new task for this player
+    setTimeout(() => {
+      if (player === 1) {
+        p1Task = genTask();
+        p1Answer = '';
+        p1Answered = false;
+        document.getElementById('p1Task').textContent = p1Task.text + ' = ?';
+        document.getElementById('p1Input').textContent = '\u00A0';
+        document.getElementById('p1Feedback').innerHTML = '&nbsp;';
+        document.getElementById('p1Input').classList.remove('correct-flash');
+        document.getElementById('p1Input').className = 'input-display w-48 mb-2 text-red-700 p1-active';
+      } else {
+        p2Task = genTask();
+        p2Answer = '';
+        p2Answered = false;
+        document.getElementById('p2Task').textContent = p2Task.text + ' = ?';
+        document.getElementById('p2Input').textContent = '\u00A0';
+        document.getElementById('p2Feedback').innerHTML = '&nbsp;';
+        document.getElementById('p2Input').classList.remove('correct-flash');
+        document.getElementById('p2Input').className = 'input-display w-48 mb-2 text-blue-700 p2-active';
+      }
+    }, 300);
+  } else {
+    feedbackEl.innerHTML = `<span class="text-red-500">❌ ${task.answer}</span>`;
+    inputEl.classList.add('wrong-flash');
+    
+    // Move rope back and generate new task immediately
+    if (player === 1) { ropePos += 5; p1Task = genTask(); p1Answer = ''; p1Answered = false; }
+    else { ropePos -= 5; p2Task = genTask(); p2Answer = ''; p2Answered = false; }
+    
+    updateRope();
+    
+    // Show new task instantly
+    setTimeout(() => {
+      if (player === 1) {
+        document.getElementById('p1Task').textContent = p1Task.text + ' = ?';
+        document.getElementById('p1Input').textContent = '\u00A0';
+        document.getElementById('p1Feedback').innerHTML = '&nbsp;';
+        document.getElementById('p1Input').classList.remove('wrong-flash');
+        document.getElementById('p1Input').className = 'input-display w-48 mb-2 text-red-700 p1-active';
+      } else {
+        document.getElementById('p2Task').textContent = p2Task.text + ' = ?';
+        document.getElementById('p2Input').textContent = '\u00A0';
+        document.getElementById('p2Feedback').innerHTML = '&nbsp;';
+        document.getElementById('p2Input').classList.remove('wrong-flash');
+        document.getElementById('p2Input').className = 'input-display w-48 mb-2 text-blue-700 p2-active';
+      }
+    }, 200);
+  }
+}
+
+function endRound(winner) {
+  const container = document.getElementById('screen-game');
+  container.style.pointerEvents = 'none';
+  container.style.opacity = '0.5';
+
+  // Pick 2 new random players
+  const shuffled = [...playerNames].sort(() => Math.random() - 0.5);
+  const nextP1 = shuffled[0];
+  const nextP2 = shuffled[1];
+
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:1000';
+  
+  const content = document.createElement('div');
+  content.style.cssText = 'background:white;padding:40px;border-radius:20px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.3)';
+  
+  const title = document.createElement('h2');
+  title.className = 'Montserrat';
+  title.style.cssText = 'font-size:2.5rem;font-weight:bold;margin:0 0 20px 0;color:#e74c3c';
+  title.textContent = winner + ' pobjeđuje etapu! 🎉';
+  
+  const nextPlayersDisplay = document.createElement('div');
+  nextPlayersDisplay.className = 'Montserrat';
+  nextPlayersDisplay.style.cssText = 'font-size:1.3rem;font-weight:bold;margin:20px 0;padding:15px;background:#f0fdf4;border-radius:10px';
+  nextPlayersDisplay.innerHTML = `Sljedeća etapa: <span style="color:#e74c3c">${nextP1}</span> <span style="color:#f59e0b">⚔️</span> <span style="color:#3498db">${nextP2}</span>`;
+  
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'Montserrat';
+  nextBtn.style.cssText = 'margin-top:20px;padding:12px 30px;background:#f59e0b;color:white;border:none;border-radius:10px;font-size:1.1rem;font-weight:bold;cursor:pointer';
+  nextBtn.textContent = '➜ Sljedeća etapa';
+  
+  nextBtn.addEventListener('click', () => {
+    modal.remove();
+    container.style.pointerEvents = 'auto';
+    container.style.opacity = '1';
+    p1Name = nextP1;
+    p2Name = nextP2;
+    startNewRound();
+  });
+  
+  content.appendChild(title);
+  content.appendChild(nextPlayersDisplay);
+  content.appendChild(nextBtn);
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+}
+
+function startNewRound() {
+  // Pick 2 new random players
+  const shuffled = [...playerNames].sort(() => Math.random() - 0.5);
+  p1Name = shuffled[0];
+  p2Name = shuffled[1];
+  
+  p1Score = 0;
+  p2Score = 0;
+  currentTask = 0;
+  ropePos = 50;
+  
+  document.getElementById('p1NameDisplay').textContent = p1Name;
+  document.getElementById('p2NameDisplay').textContent = p2Name;
+  document.getElementById('p1NameRope').textContent = p1Name;
+  document.getElementById('p2NameRope').textContent = p2Name;
+  
+  updateRope();
+  renderScoreDots();
+  nextRound();
+}
+
+function updateRope() {
+  const clamped = Math.max(10, Math.min(90, ropePos));
+  ropePos = clamped;
+  document.getElementById('ropeMarker').style.left = clamped + '%';
+  document.getElementById('ropeFillLeft').style.width = clamped + '%';
+  document.getElementById('ropeFillRight').style.width = (100 - clamped) + '%';
+}
+
+function renderScoreDots() {
+  const container = document.getElementById('scoreDots');
+  container.innerHTML = '';
+  for (let i = 0; i < totalTasks; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'score-dot empty';
+    dot.id = 'dot-' + i;
+    container.appendChild(dot);
+  }
+}
+
+function updateScores() {
+  document.getElementById('p1ScoreNum').textContent = p1Score;
+  document.getElementById('p2ScoreNum').textContent = p2Score;
+  // Update dots
+  let p1Filled = 0, p2Filled = 0;
+  for (let i = 0; i < totalTasks; i++) {
+    const dot = document.getElementById('dot-' + i);
+    if (!dot) continue;
+    if (p1Filled < p1Score) { dot.className = 'score-dot filled-p1'; p1Filled++; }
+    else if (p2Filled < p2Score) { dot.className = 'score-dot filled-p2'; p2Filled++; }
+    else { dot.className = 'score-dot empty'; }
+  }
+}
+
+function endGame() {
+  showScreen('screen-winner');
+  let winnerName, winnerColor;
+  if (p1Score > p2Score) { winnerName = p1Name; winnerColor = '#e74c3c'; }
+  else if (p2Score > p1Score) { winnerName = p2Name; winnerColor = '#3498db'; }
+  else { winnerName = 'Neriješeno!'; winnerColor = '#f59e0b'; }
+
+  const wt = document.getElementById('winnerText');
+  if (winnerName === 'Neriješeno!') {
+    wt.textContent = '🤝 Neriješeno!';
+    wt.style.color = winnerColor;
+  } else {
+    wt.textContent = winnerName + ' pobjeđuje!';
+    wt.style.color = winnerColor;
+  }
+  document.getElementById('winnerScore').textContent = `${p1Name} ${p1Score} : ${p2Score} ${p2Name}`;
+  spawnConfetti();
+}
+
+function spawnConfetti() {
+  const c = document.getElementById('confettiContainer');
+  c.innerHTML = '';
+  const colors = ['#e74c3c','#3498db','#f1c40f','#2ecc71','#9b59b6','#e67e22','#1abc9c'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 40 + '%';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animationDelay = (Math.random() * 1) + 's';
+    p.style.animationDuration = (1 + Math.random() * 1.5) + 's';
+    c.appendChild(p);
+  }
+}
+
+document.getElementById('playAgainBtn').addEventListener('click', () => {
+  showScreen('screen-tasktype');
+  document.getElementById('selectedTypeDisplay').classList.add('hidden');
+});
+
+document.getElementById('backToMenuBtn').addEventListener('click', () => showScreen('screen-names'));
+
+// Init
+showScreen('screen-names');
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e93163aa1cfec28',t:'MTc3NTY3MDMzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
